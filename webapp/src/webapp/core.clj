@@ -18,8 +18,8 @@
 (def site-map 
 	(html
 		[:h3 "Doug's Website"]
-		[:ul (linkfy "dougpuett.com/microblog" "Micro-Blog")]
-		[:ul (linkfy "dougpuett.com/ff" "Fantasy Football")]
+		[:ul (linkfy "microblog" "Micro-Blog")]
+		[:ul (linkfy "ff" "Fantasy Football")]
 		[:ul "Full Blog"]
 		[:ul "Poetry Reader"]
 		))
