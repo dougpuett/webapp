@@ -5,8 +5,6 @@
            [com.mongodb DB WriteConcern])
   (:use [compojure.core :only (GET defroutes context)]
         [hiccup.core]
-        [best-content.skills]
-        [best-content.about]
         [ring.adapter.jetty :only (run-jetty)])
   (:require (compojure handler route)[ring.util.response :as response]
         [monger.core :as mg]

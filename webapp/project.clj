@@ -10,7 +10,8 @@
                  [com.novemberain/monger "2.0.0"]
 ]
   :plugins [[lein-ring "0.8.11"]]
-  :main ^:skip-aot webapp.core
-  :target-path "target/%s"
+;  :main ^:skip-aot webapp.core
+;  :target-path "target/%s"
   :ring {:handler webapp.core/router}
-  :profiles {:uberjar {:aot :all}})
+;  :profiles {:uberjar {:aot :all}}
+)
