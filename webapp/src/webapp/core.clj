@@ -14,6 +14,7 @@
         [monger.query :refer :all]))
 
 (defroutes router*
-	(GET "/" (output "")))
+	(GET "/" request "Doug's Website")
+	(compojure.route/not-found "Link not found."))
 
 (def router (compojure.handler/api router*))
