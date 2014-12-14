@@ -2,7 +2,8 @@
  (:refer-clojure :exclude [sort find])
  (:require
     [webapp.html_helpers :refer :all]
-    [hiccup.core :refer :all]))
+    [hiccup.core :refer :all]
+    [webapp.microblog_home :refer :all]))
 
 (def microblog_header (html [:head [:meta {:charset "utf-8"}]]))
 
