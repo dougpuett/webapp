@@ -9,21 +9,22 @@
     [ring.util.response :refer :all]
     [monger.core :as mg]
     [hiccup.core :refer :all]
+    [webapp.html_helpers :refer :all]
     [monger.operators :refer :all]
     [monger.collection :as mc]
+    [webapp.html_post :refer :all]
     [monger.conversion :refer [from-db-object]]
     [monger.query :refer :all]))
 
-(defn posts [] (map #(get % "message") (let [
+(defn posts [] (map #(into {} %) (let [
    conn (mg/connect)
    db  (mg/get-db conn "webapp")
    coll "micro"]
- (mc/find db coll {}))))
+ (with-collection db coll 
+ 	(find {})
+ 	(sort {:_id -1})))))
 
-(defn microblog [] (html (map #(vector :p %) (posts))))
-
-(defn mb_post_post [message] (do 
-	(let [
+(defn mb_post_post [message] (do (let [
 		conn (mg/connect)
 		db  (mg/get-db conn "webapp")
 		coll "micro"]

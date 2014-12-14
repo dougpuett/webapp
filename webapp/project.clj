@@ -8,7 +8,7 @@
                  [compojure "1.2.0"]
                  [ring "1.3.1"]
                  [com.novemberain/monger "2.0.0"]
-]
+                 [clj-time "0.8.0"]]
   :plugins [[lein-ring "0.8.11"]]
 ;  :main ^:skip-aot webapp.core
 ;  :target-path "target/%s"
