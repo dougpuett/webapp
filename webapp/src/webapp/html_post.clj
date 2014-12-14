@@ -16,7 +16,7 @@
 		[:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
 		]))
 
-(defn microblog [posts] 
+(defn microblog_html [posts] 
 	(str 
 		microblog_header 
 		(html [:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);"} 
