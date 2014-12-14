@@ -24,6 +24,8 @@
  	(find {})
  	(sort {:_id -1})))))
 
+(defn microblog_html [] (microblog posts))
+
 (defn mb_post_post [message] (do (let [
 		conn (mg/connect)
 		db  (mg/get-db conn "webapp")

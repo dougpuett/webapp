@@ -2,8 +2,7 @@
  (:refer-clojure :exclude [sort find])
  (:require
     [webapp.html_helpers :refer :all]
-    [hiccup.core :refer :all]
-    [webapp.microblog_home :refer :all]))
+    [hiccup.core :refer :all]))
 
 (def microblog_header (html [:head [:meta {:charset "utf-8"}]]))
 
@@ -17,7 +16,7 @@
 		[:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
 		]))
 
-(defn microblog [] 
+(defn microblog [posts] 
 	(str 
 		microblog_header 
 		(html [:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);"} 
