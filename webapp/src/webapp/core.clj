@@ -5,6 +5,7 @@
   		[ring.middleware.params :refer :all]
   		[webapp.ff_home :refer :all]
   		[webapp.html_helpers :refer :all]
+  		[webapp.html_post :refer :all]
   		[webapp.microblog_home :refer :all]
   		[compojure.core :refer :all]; :only (GET POSTdefroutes context)]
         [ring.adapter.jetty :only (run-jetty)]
@@ -12,13 +13,16 @@
         [hiccup.form :refer :all]))
 
 (def site-map 
-	(html
-		[:h3 "Doug's Website"]
-		[:ul (linkfy "microblog" "Micro-Blog")]
-		[:ul (linkfy "ff" "Fantasy Football")]
-		[:ul "Full Blog"]
-		[:ul "Poetry Reader"]
-		))
+	(str microblog_header (html
+		[:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"}
+			[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Website"]
+			[:div {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"}
+				[:p [:b "Pages:"]]
+				[:ul (linkfy "microblog" "Micro-Blog")]
+				[:ul (linkfy "ff" "Fantasy Football")]
+				[:ul "Full Blog"]
+				[:ul "Poetry Reader"]]]
+		)))
 
 (defroutes router*
 	(GET "/" request site-map)

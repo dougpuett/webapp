@@ -19,8 +19,18 @@
 (defn microblog_html [posts] 
 	(str 
 		microblog_header 
-		(html [:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);"} 
+		(html [:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"} 
 			[:div {:style "background-color:#99CCFF;height:0px"}]
 			[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Microblog"]
 			(map html_post (posts))
 			])))
+
+(defn mb_post [] (str microblog_header (html 
+	[:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"}
+	[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Microblog"]
+	[:div {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} [:b "Message:"]
+	[:form {:action "/microblog_post" :method "POST" :id "microblog"}]
+	[:div 
+	[:textarea {:name "message" :form "microblog"}]
+	[:div {:style "height:5px"}]
+	[:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]]]])))

@@ -3,12 +3,8 @@
  (:import [com.mongodb MongoOptions ServerAddress]
       [org.bson.types ObjectId]
       [com.mongodb DB WriteConcern])
- (:require (compojure handler route)[ring.util.response :as response]
-    [compojure.core :refer :all] ;:only (GET defroutes context)]
-    [ring.adapter.jetty :only (run-jetty)]
-    [ring.util.response :refer :all]
+ (:require
     [monger.core :as mg]
-    [hiccup.core :refer :all]
     [webapp.html_helpers :refer :all]
     [monger.operators :refer :all]
     [monger.collection :as mc]
@@ -32,10 +28,3 @@
 		coll "micro"]
 	(mc/insert db coll {:message message}))
 	(str "Message Submitted!!!")))
-
-(defn mb_post [] (html 
-	[:div [:h3 "Doug's Microblog Message Inputter"]]
-	[:div "Message:"]
-	[:form {:action "/microblog_post" :method "POST" :id "microblog"}]
-	[:textarea {:name "message" :form "microblog"}]
-	[:div [:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]]))
