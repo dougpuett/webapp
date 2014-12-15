@@ -7,7 +7,8 @@
   		[webapp.html_helpers :refer :all]
   		[webapp.html_post :refer :all]
   		[webapp.microblog_home :refer :all]
-  		[compojure.core :refer :all]; :only (GET POSTdefroutes context)]
+  		[webapp.logging :refer :all]
+  		[compojure.core :refer :all]; :only (GET POST defroutes context)]
         [ring.adapter.jetty :only (run-jetty)]
         [hiccup.core :refer :all]
         [hiccup.form :refer :all]))
@@ -21,15 +22,18 @@
 				[:ul (linkfy "microblog" "Micro-Blog")]
 				[:ul (linkfy "ff" "Fantasy Football")]
 				[:ul "Full Blog"]
-				[:ul "Poetry Reader"]]]
+				[:ul "Poetry Reader"]
+				; [:ul (linkfy "site_stats" "Site Statistics")]
+				[:ul "Site Statistics"]]]
 		)))
 
 (defroutes router*
-	(GET "/" request site-map)
-	(GET "/ff" request ff)
-	(GET "/microblog" request (microblog))
-	(GET "/microblog/post" request (mb_post))
-    (POST "/microblog_post" {params :params} (mb_post_post (params :message)))
+	(GET "/" request (do (log request "homepage" "request" {}) (str site-map request)))
+	(GET "/ff" request (do (log request "fantasy-football" "request" {}) ff))
+	(GET "/microblog" request (do (log request "microblog" "request" {}) (microblog)))
+	(GET "/microblog/post" request (do (log request "microblog_post" "request" {}) (mb_post)))
+    (POST "/microblog_post" request (let [message (:message (:params request))] (do (log request "microblog_post" "publish" {:message message}) (mb_post_post message))))
+    (GET "/site_stats" request (do (log request "site_stats" "request" {}) "Site Statistics"))
 	(compojure.route/not-found "Link not found."))
 
 (def router (compojure.handler/api router*))
