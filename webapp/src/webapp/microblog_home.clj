@@ -5,6 +5,7 @@
       [com.mongodb DB WriteConcern])
  (:require
     [monger.core :as mg]
+    [autoclave.core :refer :all]
     [webapp.html_helpers :refer :all]
     [monger.operators :refer :all]
     [monger.collection :as mc]
@@ -22,9 +23,14 @@
 
 (defn microblog [] (microblog_html posts))
 
+(def policy (html-policy :allow-elements ["a" "em" "b"]
+                         :allow-attributes ["href" :on-elements ["a"]]
+                         :allow-standard-url-protocols
+                         :require-rel-nofollow-on-links))
+
 (defn mb_post_post [message] (do (let [
 		conn (mg/connect)
 		db  (mg/get-db conn "webapp")
 		coll "micro"]
-	(mc/insert db coll {:message message}))
+	(mc/insert db coll {:message (html-sanitize policy message)}))
 	(str "Message Submitted!!!")))
