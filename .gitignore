@@ -1,2 +1,3 @@
 .ssh
 webapp.sub*
+webapp/resources/logs/*

@@ -8,10 +8,10 @@
   		[webapp.html_post :refer :all]
   		[webapp.microblog_home :refer :all]
   		[webapp.logging :refer :all]
+  		[webapp.site_stats :refer :all]
   		[compojure.core :refer :all]; :only (GET POST defroutes context)]
         [ring.adapter.jetty :only (run-jetty)]
-        [hiccup.core :refer :all]
-        [hiccup.form :refer :all]))
+        [hiccup.core :refer :all]))
 
 (def site-map 
 	(str microblog_header (html
@@ -28,12 +28,13 @@
 		)))
 
 (defroutes router*
-	(GET "/" request (do (log request "homepage" "request" {}) (str site-map request)))
-	(GET "/ff" request (do (log request "fantasy-football" "request" {}) ff))
-	(GET "/microblog" request (do (log request "microblog" "request" {}) (microblog)))
-	(GET "/microblog/post" request (do (log request "microblog_post" "request" {}) (mb_post)))
-    (POST "/microblog_post" request (let [message (:message (:params request))] (do (log request "microblog_post" "publish" {:message message}) (mb_post_post message))))
-    (GET "/site_stats" request (do (log request "site_stats" "request" {}) "Site Statistics"))
+	(GET "/" request (do (log request "homepage" "page-view" (:remote-addr request) {}) (str site-map request)))
+	(GET "/ff" request (do (log request "fantasy-football" "page-view" (:remote-addr request) {}) ff))
+	(GET "/microblog" request (do (log request "microblog" "page-view" (:remote-addr request) {}) (microblog)))
+	(GET "/microblog/post" request (do (log request "microblog_post" "page-view" (:remote-addr request) {}) (mb_post)))
+    (POST "/microblog_post" request (let [message (:message (:params request))] (do (log request "microblog_post" "publish" (:remote-addr request) {:message message}) (mb_post_post message))))
+    ; (GET "/site_stats" request (do (log request "site_stats" "page-view" (:remote-addr request) {}) "Site Statistics"))
+    (GET "/site_stats" request (do (log request "site_stats" "page-view" (:remote-addr request) {}) (stats-output)))    
 	(compojure.route/not-found "Link not found."))
 
 (def router (compojure.handler/api router*))
