@@ -14,11 +14,11 @@
         [hiccup.core :refer :all]))
 
 (def site-map 
-	(str microblog_header (html
-		[:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"}
-			[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Website"]
-			[:div {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"}
-				[:p [:b "Pages:"]]
+	(str site_header (html
+		[:body 
+			[:h2 "Doug's Website"]
+			[:div {:class "main" :style "padding-bottom:5px"}
+				[:p {:style "padding:15px;padding-bottom:0px"} [:b "Pages:"]]
 				[:ul (linkfy "microblog" "Micro-Blog")]
 				[:ul (linkfy "ff" "Fantasy Football")]
 				[:ul "Full Blog"]

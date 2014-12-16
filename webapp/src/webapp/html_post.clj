@@ -1,14 +1,16 @@
 (ns webapp.html_post
  (:refer-clojure :exclude [sort find])
  (:require
+ 	[garden.core :refer [css]]
     [webapp.html_helpers :refer :all]
     [hiccup.core :refer :all]))
 
-(def microblog_header (html [:head [:meta {:charset "utf-8"}]]))
+
+
 
 (defn html_post [post] 
 	(html 
-		[:div {:style "background-color:white;width:500px;padding-top:5px;padding-bottom:5px;margin-bottom:4px;margin-left:50px;border-radius:6px"}
+		[:div {:class "main" :style "padding-top:5px;padding-bottom:5px;margin-bottom:4px;"}
 		[:div {:style "margin-left:10px;margin-right:5px"} 
 			[:b "Doug Puett "]
 			[:span {:style "color:grey"} (parse_time (str (:_id post)))]]
@@ -18,19 +20,31 @@
 
 (defn microblog_html [posts] 
 	(str 
-		microblog_header 
-		(html [:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"} 
-			[:div {:style "background-color:#99CCFF;height:0px"}]
-			[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Microblog"]
+		site_header 
+		(html [:body
+			[:h2  "Doug's Microblog"]
+			[:div {:class "internal" :style "height:5px;"}]
 			(map html_post (posts))
 			])))
 
-(defn mb_post [] (str microblog_header (html 
-	[:body {:style "background-color:#99CCFF;background: linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF);margin-top:10px"}
-	[:h2 {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} "Doug's Microblog"]
-	[:div {:style "margin-left:50px;padding-left:15px;background-color:white;width:485px;padding-top:14px;padding-bottom:14px;border-radius:6px"} [:b "Message:"]
+(defn mb_post [] (str site_header (html 
+	[:body
+	[:h2 "Doug's Microblog"]
+	[:div {:class "main" :style "margin-left:50px;padding-left:15px;padding-top:15px"} [:b "Message:"]
 	[:form {:action "/microblog_post" :method "POST" :id "microblog"}]
 	[:div 
 	[:textarea {:name "message" :form "microblog"}]
 	[:div {:style "height:5px"}]
-	[:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]]]])))
+	[:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]
+	[:div {:style "height:10px"}]]]])))
+
+(def message_submitted (str site_header (html 
+	[:body 
+	[:h2  "Doug's Microblog"]
+	[:div {:class "main" :style "padding-left:15px;padding-top:14px;padding-bottom:14px"} [:b "Message Submitted!!!!"]
+	[:form {:action "/microblog/post" :method "GET" :id "post"}]
+	[:form {:action "/microblog" :method "GET" :id "view"}]
+	[:div {:style "height:5px"}]
+	[:div [:button {:type "submit" :value "Submit" :form "post"} "Post Again"]
+	[:span [:button {:type "submit" :value "Submit" :form "view"} "View Post"]]]]])))
+

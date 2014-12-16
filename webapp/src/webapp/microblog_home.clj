@@ -33,4 +33,5 @@
 		db  (mg/get-db conn "webapp")
 		coll "micro"]
 	(mc/insert db coll {:message (html-sanitize policy message)}))
-	(str "Message Submitted!!!")))
+	; (str "Message Submitted!!!")))
+	message_submitted))
