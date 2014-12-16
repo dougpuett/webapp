@@ -15,6 +15,8 @@
 	[:body {:background "linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF)" :margin-top "10px" :margin-left "10px"}]
 	[:.main {:border-radius "6px" :background-color "white" :margin-left "50px" :width "500px"}]
 	[:h2 {:border-radius "6px" :padding "10px" :margin-left "50px" :width "485px" :background-color "white" }]
-	[:.internal {:background "linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF)"}]))
+	[:.internal {:background "linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF)"}]
+	[:a:link {:color "#4C6680"}]
+	[:a:visited {:color "#4C6680"}]))
 
 (def site_header (html [:head [:meta {:charset "utf-8"}]][:style site_style]))
