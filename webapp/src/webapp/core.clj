@@ -40,7 +40,7 @@
 	(GET "/" request (do (log request "homepage" "page-view" (:remote-addr request) {}) site-map))
 	(GET "/ff" request (do (log request "fantasy-football" "page-view" (:remote-addr request) {}) ff))
 	(GET "/microblog" request (do (log request "microblog" "page-view" (:remote-addr request) {}) (microblog)))
-	(GET "/microblog/post" request (friend/authenticated (if false (do (log request "microblog_post" "page-view" (:remote-addr request) {}) (mb_post))(str "Try again!\n" request))))
+	(GET "/microblog/post" request (friend/authenticated (if true (do (log request "microblog_post" "page-view" (:remote-addr request) {}) (mb_post))(str "Try again!\n" request))))
     (POST "/microblog_post" request (let [message (:message (:params request))] (do (log request "microblog_post" "publish" (:remote-addr request) {:message message}) (mb_post_post message))))
     (GET "/site_stats" request (do (log request "site_stats" "page-view" (:remote-addr request) {}) (stats-output)))    
 	(compojure.route/not-found "Link not found."))
