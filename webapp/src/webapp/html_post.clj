@@ -1,12 +1,12 @@
 (ns webapp.html_post
  (:refer-clojure :exclude [sort find])
  (:require
- 	[garden.core :refer [css]]
     [webapp.html_helpers :refer :all]
     [hiccup.core :refer :all]))
 
-
-
+;; =====================
+;; HTML FOR READER PAGE:
+;; =====================
 
 (defn html_post [post] 
 	(html 
@@ -27,6 +27,10 @@
 			(map html_post (posts))
 			])))
 
+;; ===================
+;; HTML FOR POST PAGE:
+;; ===================
+
 (defn mb_post [] (str site_header (html 
 	[:body
 	[:h2 "Doug's Microblog"]
@@ -38,6 +42,10 @@
 	[:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]
 	[:div {:style "height:10px"}]]]])))
 
+;; =====================
+;; HTML FOR POST SUBMIT:
+;; =====================
+
 (def message_submitted (str site_header (html 
 	[:body 
 	[:h2  "Doug's Microblog"]
@@ -47,4 +55,3 @@
 	[:div {:style "height:5px"}]
 	[:div [:button {:type "submit" :value "Submit" :form "post"} "Post Again"]
 	[:span [:button {:type "submit" :value "Submit" :form "view"} "View Post"]]]]])))
-

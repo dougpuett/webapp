@@ -13,6 +13,10 @@
     [monger.conversion :refer [from-db-object]]
     [monger.query :refer :all]))
 
+;; ===========================
+;; LOGIC FOR MICROBLOG READER:
+;; ===========================
+
 (defn posts [] (map #(into {} %) (let [
    conn (mg/connect)
    db  (mg/get-db conn "webapp")
@@ -23,6 +27,9 @@
 
 (defn microblog [] (microblog_html posts))
 
+;; ===========================
+;; LOGIC FOR MICROBLOG POSTER:
+;; ===========================
 (def policy (html-policy :allow-elements ["a" "em" "b"]
                          :allow-attributes ["href" :on-elements ["a"]]
                          :allow-standard-url-protocols
@@ -33,5 +40,4 @@
 		db  (mg/get-db conn "webapp")
 		coll "micro"]
 	(mc/insert db coll {:message (html-sanitize policy message)}))
-	; (str "Message Submitted!!!")))
 	message_submitted))
