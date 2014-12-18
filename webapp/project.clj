@@ -12,6 +12,7 @@
                  [clj-time "0.8.0"]
                  [garden "1.2.5"]
                  [com.taoensso/carmine "2.9.0"]
+                 [com.cemerick/friend "0.2.1"]
                  [autoclave "0.1.7" :exclusions [com.google.guava/guava com.google.code.findbugs/jsr305 com.google.code.findbugs/jsr305]]]
   :plugins [[lein-ring "0.8.11"]]
   :main ^:skip-aot webapp.core
