@@ -53,9 +53,12 @@
 		[{:keys [username password]}]
 		(let [{:keys [roles hashed-password]} (get_roles_from_redis username)]
 			(if 
-				(BCrypt/checkpw password hashed-password)
-				{:username username :roles roles}
-				nil)))
+				(nil? hashed-password)
+				nil
+					(if 
+					(BCrypt/checkpw password hashed-password)
+					{:username username :roles roles}
+					nil))))
 
 (def secured-app (friend/authenticate
 	router*
