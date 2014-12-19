@@ -1,5 +1,6 @@
 (ns webapp.core
   (:refer-clojure :exclude [sort find])
+  (:import org.mindrot.jbcrypt.BCrypt)
   (:require (compojure handler route core response)
   		[ring.util.response :as response]
   		[ring.middleware.params :refer :all]
@@ -12,6 +13,7 @@
   		[compojure.core :refer :all]
   		[compojure.response :refer :all]
   		[compojure.handler :refer :all]
+  		[taoensso.carmine :as car :refer (wcar)]
         [ring.adapter.jetty :only (run-jetty)]
         [cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])
         [hiccup.core :refer :all]))
@@ -29,13 +31,6 @@
 				[:ul (linkfy "site_stats" "Site Statistics")]
 		]])))
 
-(def users {"root" {:username "root"
-                    :password (creds/hash-bcrypt "admin_password")
-                    :roles #{::admin}}
-            "jane" {:username "jane"
-                    :password (creds/hash-bcrypt "user_password")
-                    :roles #{::user}}})
-
 (defroutes router*
 	(GET "/" request (do (log request "homepage" "page-view" (:remote-addr request) {}) site-map))
 	(GET "/ff" request (do (log request "fantasy-football" "page-view" (:remote-addr request) {}) ff))
@@ -48,12 +43,26 @@
 ; No Authentication:
 ; (def router (compojure.handler/api router*))
 
+;; =====================
+;; REDIS AUTHENTICATION:
+;; =====================
+(defn get_roles_from_redis [username] (wcar* (car/get (str "password:" username))))
+
+(defn redis-credentials
+	"This will be a function that takes a map {:username X :password Y} and returns {:username X :roles Z} iff hash(Y) = Y' (hashed password in redis)."
+		[{:keys [username password]}]
+		(let [{:keys [roles hashed-password]} (get_roles_from_redis username)]
+			(if 
+				(BCrypt/checkpw password hashed-password)
+				{:username username :roles roles}
+				nil)))
+
 (def secured-app (friend/authenticate
 	router*
 		{:allow-anon? true
-		:unauthenticated-handler #(workflows/http-basic-deny "Friend demo" %)
+		:unauthenticated-handler #(workflows/http-basic-deny "Login to post" %)
 		:workflows [(workflows/http-basic
-		:credential-fn #(creds/bcrypt-credential-fn users %)
-		:realm "Friend demo")]}))
+		:credential-fn redis-credentials
+		:realm "Login to Post")]}))
 
 (def router (site secured-app))
