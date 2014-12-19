@@ -27,6 +27,8 @@
 ;; =====================
 ;; REDIS AUTHENTICATION:
 ;; =====================
+(def server1-conn {:pool {} :spec {:host "127.0.0.1" :port 6379}})
+(defmacro wcar* [& body] `(car/wcar server1-conn ~@body))
 (defn get_roles_from_redis [username] (wcar* (car/get (str "password:" username))))
 
 (defn redis-credentials
