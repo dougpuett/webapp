@@ -14,11 +14,20 @@
 
 (defroutes router*
 	(GET "/" [] homepage_ctrl)
+	(GET "/login" [] login-form)
+	(GET "/logout" request (friend/logout* (response/redirect (str (:context request) "/"))))
 	(GET "/ff" [] fantasy-football_ctrl)
 	(GET "/microblog" [] microblog_ctrl)
 	(GET "/microblog/post" [] microblog_post_ctrl)
 	(POST "/microblog_post" [] microblog_publish_ctrl)
 	(GET "/site_stats" [] site_stats_ctrl)
+	(GET "/request" [] str)
+	(GET "/requires-authentication" req
+		(friend/authenticated "Thanks for authenticating!"))
+	(GET "/role-user" req
+		(friend/authorize #{:webapp.core/user} "You're a user!"))
+	(GET "/role-admin" req
+		(friend/authorize #{:webapp.core/admin} "You're an admin!"))
 	(compojure.route/not-found "Link not found."))
 
 ; No Authentication:
@@ -43,12 +52,23 @@
 						{:username username :roles roles}
 						nil))))
 
+; (def secured-app (friend/authenticate
+; 	router*
+; 		{:allow-anon? true
+; 		:unauthenticated-handler #(workflows/http-basic-deny "Login to post" %)
+; 		:workflows [(workflows/http-basic
+; 		:credential-fn redis-credentials
+; 		:realm "Login to Post")]}))
+
 (def secured-app (friend/authenticate
 	router*
 		{:allow-anon? true
-		:unauthenticated-handler #(workflows/http-basic-deny "Login to post" %)
-		:workflows [(workflows/http-basic
+		:login-uri "/login"
+		:default-landing-uri "/"
+		:unauthorized-handler #(-> (str "You do not have sufficient privileges to access" (:uri %))
+			response/response
+			(response/status 401))
 		:credential-fn redis-credentials
-		:realm "Login to Post")]}))
+		:workflows [(workflows/interactive-form)]}))
 
 (def router (site secured-app))
