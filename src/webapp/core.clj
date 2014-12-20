@@ -21,13 +21,13 @@
 	(GET "/microblog/post" [] microblog_post_ctrl)
 	(POST "/microblog_post" [] microblog_publish_ctrl)
 	(GET "/site_stats" [] site_stats_ctrl)
-	(GET "/request" [] str)
+	; (GET "/request" [] str)
 	(GET "/requires-authentication" req
 		(friend/authenticated "Thanks for authenticating!"))
-	(GET "/role-user" req
-		(friend/authorize #{:webapp.core/user} "You're a user!"))
-	(GET "/role-admin" req
-		(friend/authorize #{:webapp.core/admin} "You're an admin!"))
+	; (GET "/role-user" req
+	;	(friend/authorize #{:webapp.core/user :webapp.core/admin} "You're a user!"))
+	; (GET "/role-admin" req
+	; 	(friend/authorize #{:webapp.core/admin} "You're an admin!"))
 	(compojure.route/not-found "Link not found."))
 
 ; No Authentication:

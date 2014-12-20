@@ -25,6 +25,7 @@
 	[:.main {:border-radius "6px" :background-color "white" :margin-left "50px" :width "500px"}]
 	[:h2 {:border-radius "6px" :padding "10px" :margin-left "50px" :width "485px" :background-color "white" }]
 	[:.internal {:background background-style}]
+	[:input {:border-radius "5px" :border "1px solid black"}]
 	[:a:link {:color "#4C6680"}]
 	[:a:visited {:color "#4C6680"}]))
 

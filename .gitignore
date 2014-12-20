@@ -2,3 +2,6 @@
 webapp.sub*
 resources/logs/*
 target/*
+target/*
+.lein-repl-history
+.nrepl-port
