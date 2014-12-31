@@ -10,3 +10,4 @@ target.*
 target/.*
 target*
 .*pom.properties
+resources/public/js/*
