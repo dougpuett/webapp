@@ -1,6 +1,7 @@
 (ns webapp.core
-	(:refer-clojure :exclude [sort find])
+	(:refer-clojure :exclude [find])
 	(:import org.mindrot.jbcrypt.BCrypt)
+	(:import (java.io ByteArrayOutputStream))
 	(:require (compojure handler route core response)
 			[ring.util.response :as response]
 			[ring.middleware.params :refer :all]
@@ -10,7 +11,40 @@
 			[compojure.handler :refer :all]
 			[taoensso.carmine :as car :refer (wcar)]
 			[ring.adapter.jetty :only (run-jetty)]
+			[cognitect.transit :as transit]
+			[cheshire.core :refer :all]
+			[clojure.java.io :as io]
 			[cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])))
+
+(def full_input (into [] (map parse-string (clojure.string/split (slurp (io/file (io/resource "fullmap.json"))) #"\n"))))
+
+(def output2 (into [] (flatten (for [[team weeks] (group-by #(get % "team") full_input)] 
+	(let [sorted-weeks (sort-by #(get % "week") weeks)]
+		(map #(hash-map 
+			"team" team 
+			"x1" (get %1 "week") 
+			"y1" (get %1 "odds") 
+			"x2" (get %2 "week") 
+			"y2" (get %2 "odds")) 
+		sorted-weeks (rest sorted-weeks)))))))
+
+(def output3 (vec (concat output2 (take 25 output2))))
+
+(defn write [x]
+  (let [baos (ByteArrayOutputStream.)
+        w    (transit/writer baos :json)
+        _    (transit/write w x)
+        ret  (.toString baos)]
+    (.reset baos)
+    ret))
+
+(defn transit [req]
+	{:header {"Content-Type" "application/transit+json"}
+	:body (write full_input)})
+
+(defn transit2 [req]
+	{:header {"Content-Type" "application/transit+json"}
+	:body (write output3)})
 
 (defroutes router*
 	(GET "/" [] homepage_ctrl)
@@ -21,6 +55,9 @@
 	(GET "/microblog/post" [] microblog_post_ctrl)
 	(POST "/microblog_post" [] microblog_publish_ctrl)
 	(GET "/site_stats" [] site_stats_ctrl)
+	(GET "/ff_graph" [] d3_test)
+	(GET "/ff_data" [] transit)
+	(GET "/ff_data2" [] transit2)
 	; (GET "/request" [] str)
 	(GET "/requires-authentication" req
 		(friend/authenticated "Thanks for authenticating!"))
@@ -28,6 +65,7 @@
 	;	(friend/authorize #{:webapp.core/user :webapp.core/admin} "You're a user!"))
 	; (GET "/role-admin" req
 	; 	(friend/authorize #{:webapp.core/admin} "You're an admin!"))
+	(compojure.route/resources "/")
 	(compojure.route/not-found "Link not found."))
 
 ; No Authentication:

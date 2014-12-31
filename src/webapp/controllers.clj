@@ -2,13 +2,31 @@
     (:refer-clojure :exclude [sort find])
     (:require
         [webapp.ff_home :refer :all]
+        [cheshire.core :refer :all]
         [webapp.html_helpers :refer :all]
         [webapp.html_post :refer :all]
         [webapp.microblog_home :refer :all]
         [webapp.logging :refer :all]
         [webapp.site_stats :refer :all]
+        [garden.core :refer [css]]
     [cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])
     [hiccup.core :refer :all]))
+
+(def d3_test (str site_header (html 
+    [:style (css 
+        [:circle {:fill-opacity 0.5 :stroke-opacity 1 :stroke-width "2px"}]
+        [:circle:hover {:fill-opacity 0.75}]
+        [:circle.white {:fill-opacity 1 :fill "white" :stroke "white"}]
+        [:circle.right {:fill "steelblue" :stroke "steelblue"}]
+        [:circle.bottom {:fill "green" :stroke "green"}]
+        #_[:div {:height 1000 :width 1000}])]
+    [:script {:type "text/javascript" :src "http://d3js.org/d3.v3.min.js"}]
+    [:body 
+        [:h2 "Fantasy Football Playoff Odds"]
+        [:div 
+        [:script {:type "text/javascript" :src "/js/simple.js"}]]])))
+
+(def d3_base (str site_header (html [:div {:class "main"} ])))
 
 (def site-map 
     (str site_header (html
@@ -18,6 +36,7 @@
     [:p {:style "padding:15px;padding-bottom:0px"} [:b "Pages:"]]
     [:ul (linkfy "microblog" "Micro-Blog")]
     [:ul (linkfy "ff" "Fantasy Football")]
+    [:ul (linkfy "ff_graph" "FF Graph (D3.js Example)")]
     [:ul "Full Blog"]
     [:ul "Poetry Reader"]
     [:ul (linkfy "site_stats" "Site Statistics")]

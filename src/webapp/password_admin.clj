@@ -10,3 +10,4 @@
 (defn set_roles_to_redis [username password roles] (wcar* (car/set (str "password:" username) {:hashed-password (creds/hash-bcrypt password) :roles roles})))
 
 (set_roles_to_redis "" "" #{:webapp.core/user})
+(set_roles_to_redis "doug_admin" "pimpin" #{:webapp.core/admin})

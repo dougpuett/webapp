@@ -19,14 +19,16 @@
 		today-formatter)
 	 (l/to-local-date-time (clj-time.coerce/from-long timestamp)))))
 
-(def background-style "linear-gradient(to right, #99CCFF, #8AB8E6, #99CCFF)")
+(def background-style "linear-gradient(to right, #99CCFF, #7AA3CC, #99CCFF)")
 (def site_style (css 
 	[:body {:background background-style :margin-top "10px" :margin-left "10px"}]
 	[:.main {:border-radius "6px" :background-color "white" :margin-left "50px" :width "500px"}]
-	[:h2 {:border-radius "6px" :padding "10px" :margin-left "50px" :width "485px" :background-color "white" }]
+	[:svg {:border-radius "6px" :background-color "white" :margin-left "50px" :width "1000px" :height "500px" :padding "20px"}]
+	[:h2 {:border-radius "6px" :padding "10px" :margin-left "50px" :width "485px" :background-color "white"}]
 	[:.internal {:background background-style}]
 	[:input {:border-radius "5px" :border "1px solid black"}]
 	[:a:link {:color "#4C6680"}]
-	[:a:visited {:color "#4C6680"}]))
+	[:a:visited {:color "#4C6680"}]
+	[:.axis [:path :line {:fill "none" :stroke "black" :shape-rendering "crispEdges"}]]))
 
 (def site_header (html [:head [:meta {:charset "utf-8"}][:style site_style]]))
