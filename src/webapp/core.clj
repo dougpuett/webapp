@@ -68,9 +68,6 @@
 	(compojure.route/resources "/")
 	(compojure.route/not-found "Link not found."))
 
-; No Authentication:
-; (def router (compojure.handler/api router*))
-
 ;; =====================
 ;; REDIS AUTHENTICATION:
 ;; =====================
@@ -89,14 +86,6 @@
 						(BCrypt/checkpw password hashed-password)
 						{:username username :roles roles}
 						nil))))
-
-; (def secured-app (friend/authenticate
-; 	router*
-; 		{:allow-anon? true
-; 		:unauthenticated-handler #(workflows/http-basic-deny "Login to post" %)
-; 		:workflows [(workflows/http-basic
-; 		:credential-fn redis-credentials
-; 		:realm "Login to Post")]}))
 
 (def secured-app (friend/authenticate
 	router*

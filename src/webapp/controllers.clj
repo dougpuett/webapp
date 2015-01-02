@@ -13,18 +13,15 @@
     [hiccup.core :refer :all]))
 
 (def d3_test (str site_header (html 
-    [:style (css 
+    [:style (str graph_objects (css 
         [:circle {:fill-opacity 0.5 :stroke-opacity 1 :stroke-width "2px"}]
         [:circle:hover {:fill-opacity 0.75}]
-        [:circle.white {:fill-opacity 1 :fill "white" :stroke "white"}]
-        [:circle.right {:fill "steelblue" :stroke "steelblue"}]
-        [:circle.bottom {:fill "green" :stroke "green"}]
-        #_[:div {:height 1000 :width 1000}])]
+        #_[:svg:hover {:fill-opacity 0.15}]))]
     [:script {:type "text/javascript" :src "http://d3js.org/d3.v3.min.js"}]
     [:body 
         [:h2 "Fantasy Football Playoff Odds"]
         [:div 
-        [:script {:type "text/javascript" :src "/js/simple.js"}]]])))
+        [:script {:type "text/javascript" :src "/js/ff_season.js"}]]])))
 
 (def d3_base (str site_header (html [:div {:class "main"} ])))
 

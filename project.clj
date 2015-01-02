@@ -28,13 +28,16 @@
   :cljsbuild {
     :builds [{
         ; The path to the top-level ClojureScript source directory:
-        :source-paths ["src-cljs"]
+        :source-paths 
+          ; ["src-cljs/ff_season.cljs"] ;; "../target/classes"] ?? see http://swannodette.github.io/2014/12/22/waitin/
+          ["src-cljs/ff_season"]
+        :cache-analysis true
         ; The standard ClojureScript compiler options:
         ; (See the ClojureScript compiler documentation for details.)
         :compiler {
           ; :output-to "target/cljsbuild-main.js"
-          :output-to "resources/public/js/simple.js"
+          :output-to "resources/public/js/ff_season.js"
           :optimizations :whitespace
-          :pretty-print true}}]}
+          :pretty-print false}}]}
 ;  :profiles {:uberjar {:aot :all}}
 )
