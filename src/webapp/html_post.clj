@@ -37,7 +37,7 @@
 	[:div {:class "main" :style "margin-left:50px;padding-left:15px;padding-top:15px"} [:b "Message:"]
 	[:form {:action "/microblog_post" :method "POST" :id "microblog"}]
 	[:div 
-	[:textarea {:name "message" :form "microblog"}]
+	[:textarea {:name "message" :form "microblog" :placeholder "Message Goes here." :cols "25" :rows "5"}]
 	[:div {:style "height:5px"}]
 	[:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]
 	[:div {:style "height:10px"}]]]])))

@@ -30,6 +30,7 @@
 	[:input {:border-radius "5px" :border "1px solid black"}]
 	[:a:link {:color "#4C6680"}]
 	[:a:visited {:color "#4C6680"}]
+	[:textarea {:outline "none" :resize "none" :font-size "16px"}]
 	[:.axis [:path :line {:fill "none" :stroke "black" :shape-rendering "crispEdges"}]]))
 
 (def graph_objects (css
