@@ -6,6 +6,7 @@
 			[ring.util.response :as response]
 			[ring.middleware.params :refer :all]
 			[webapp.controllers :refer :all]
+			[webapp.beowulf :refer :all]
 			[compojure.core :refer :all]
 			[compojure.response :refer :all]
 			[compojure.handler :refer :all]
@@ -54,10 +55,12 @@
 	(GET "/microblog" [] microblog_ctrl)
 	(GET "/microblog/post" [] microblog_post_ctrl)
 	(POST "/microblog_post" [] microblog_publish_ctrl)
+	(POST "/microblog_post_content" req (do (microblog_publish_ctrl req) (response/redirect "/content")))
 	(GET "/site_stats" [] site_stats_ctrl)
 	(GET "/ff_graph" [] d3_test)
 	(GET "/ff_data" [] transit)
 	(GET "/ff_data2" [] transit2)
+	(GET "/content" [] (friend/authenticated (content)))
 	; (GET "/request" [] str)
 	(GET "/requires-authentication" req
 		(friend/authenticated "Thanks for authenticating!"))

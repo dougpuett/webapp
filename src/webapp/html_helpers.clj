@@ -7,7 +7,7 @@
 			[clj-time.local :as l]
 		 	[garden.core :refer [css]]))
 
-(defn linkfy [link text] (html [:a {:href link} text]))
+(defn linkify [link text] (html [:a {:href link} text]))
 
 (def today-formatter (formatter "HH:mm, MM/dd"))
 (def legacy-formatter (formatter "MM/dd/yyyy"))

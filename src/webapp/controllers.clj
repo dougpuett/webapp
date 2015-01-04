@@ -6,6 +6,7 @@
         [webapp.html_helpers :refer :all]
         [webapp.html_post :refer :all]
         [webapp.microblog_home :refer :all]
+        [webapp.beowulf :refer :all]
         [webapp.logging :refer :all]
         [webapp.site_stats :refer :all]
         [garden.core :refer [css]]
@@ -31,12 +32,12 @@
     [:h2 "Doug's Website"]
     [:div {:class "main" :style "padding-bottom:5px"}
     [:p {:style "padding:15px;padding-bottom:0px"} [:b "Pages:"]]
-    [:ul (linkfy "microblog" "Micro-Blog")]
-    [:ul (linkfy "ff" "Fantasy Football")]
-    [:ul (linkfy "ff_graph" "FF Graph (D3.js Example)")]
+    [:ul (linkify "microblog" "Micro-Blog")]
+    [:ul (linkify "ff" "Fantasy Football")]
+    [:ul (linkify "ff_graph" "FF Graph (D3.js Example)")]
     [:ul "Full Blog"]
-    [:ul "Poetry Reader"]
-    [:ul (linkfy "site_stats" "Site Statistics")]
+    [:ul (linkify "content" "Poetry Reader")]
+    [:ul (linkify "site_stats" "Site Statistics")]
     ]])))
 
 (def login-form 
@@ -73,3 +74,4 @@
 (defn site_stats_ctrl [request] (do 
     (log request "site_stats" "page-view" (:remote-addr request) {}) 
     (stats-output)))
+
