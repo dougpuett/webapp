@@ -11,3 +11,6 @@ private
 target/classes
 target/classes/META_INF/maven/webapp/webapp
 target/classes/META_INF/maven/webapp/webapp/pom.properties
+.repl
+.*ec-init.clj
+*.ec-init.clj

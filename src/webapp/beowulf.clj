@@ -5,7 +5,10 @@
         [webapp.html_helpers :refer :all]
         [hiccup.core :refer :all]))
 
-(def beowulf [:div {:class "main" :style "height:500px;overflow:scroll;float:left"} (map #(vector :p %) beowulf_raw)])
+(def beowulf 
+    [:div 
+        {:class "main" :style "height:500px;overflow:scroll;float:left"} 
+        (map #(vector :p %) beowulf_raw)])
 
 (defn html_post_content [post] 
     (html 
@@ -25,14 +28,24 @@
     [:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]
     [:div {:style "height:10px"}]])))
 
+(defn mb_post_content_2 [] (html 
+    [:form {:action "/microblog_post_content" :method "POST" :id "microblog"}]
+    [:div 
+    [:textarea {:name "message" :form "microblog" :placeholder "Note Goes here." :cols "25" :rows "5"}]
+    [:div {:style "height:5px"}]
+    [:button {:type "submit" :value "Submit" :form "microblog"} "Submit"]
+    [:div {:style "height:10px"}]]))
+
 (defn content [] (str 
     site_header 
-    (html 
+    (html
+        [:body
         [:h2 "Beowulf"]
         [:div {:style "overflow:hidden;width:100%"}
-            beowulf
-            #_[:div {:class "internal" :style "height:10px;float:left"}] 
+            [:script {:type "text/javascript" :src "http://d3js.org/d3.v3.min.js"}]
+            [:script {:type "text/javascript" :src "/js/content_text.js"}]
+            [:div {:id "scroll" :class "main" :style "height:500px;overflow:scroll;float:left"}]
             [:div {:style "height:100px;margin-left:600px;padding:0px"} 
-                [:div (mb_post_content)]
+                [:div (mb_post_content_2)]
                 [:div {:style "height:400px;overflow:scroll;padding:0px"}
-                    (map html_post_content (posts))]]])))
+                    (map html_post_content (posts))]]]])))

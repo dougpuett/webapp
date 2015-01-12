@@ -38,6 +38,13 @@
           ; :output-to "target/cljsbuild-main.js"
           :output-to "resources/public/js/ff_season.js"
           :optimizations :whitespace
-          :pretty-print false}}]}
+          :pretty-print false}}
+        {:source-paths ["src-cljs/content_text"]
+         :cache-analysis true
+         :compiler {
+          :output-to "resources/public/js/content_text.js"
+          :optimizations :whitespace
+          :pretty-print false}}          
+        ]}
 ;  :profiles {:uberjar {:aot :all}}
 )

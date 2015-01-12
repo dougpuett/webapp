@@ -7,6 +7,7 @@
 			[ring.middleware.params :refer :all]
 			[webapp.controllers :refer :all]
 			[webapp.beowulf :refer :all]
+			[webapp.beowulf_raw :refer :all]
 			[compojure.core :refer :all]
 			[compojure.response :refer :all]
 			[compojure.handler :refer :all]
@@ -17,7 +18,7 @@
 			[clojure.java.io :as io]
 			[cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])))
 
-(def full_input (into [] (map parse-string (clojure.string/split (slurp (io/file (io/resource "fullmap.json"))) #"\n"))))
+(def full_input (mapv parse-string (clojure.string/split (slurp (io/file (io/resource "fullmap.json"))) #"\n")))
 
 (def output2 (into [] (flatten (for [[team weeks] (group-by #(get % "team") full_input)] 
 	(let [sorted-weeks (sort-by #(get % "week") weeks)]
@@ -39,13 +40,11 @@
     (.reset baos)
     ret))
 
-(defn transit [req]
+(defn transit_write [output]
 	{:header {"Content-Type" "application/transit+json"}
-	:body (write full_input)})
+	:body (write output)})
 
-(defn transit2 [req]
-	{:header {"Content-Type" "application/transit+json"}
-	:body (write output3)})
+(def content_dict {"beowulf_raw" beowulf_raw "wanderer_raw" wanderer_raw})
 
 (defroutes router*
 	(GET "/" [] homepage_ctrl)
@@ -58,12 +57,10 @@
 	(POST "/microblog_post_content" req (do (microblog_publish_ctrl req) (response/redirect "/content")))
 	(GET "/site_stats" [] site_stats_ctrl)
 	(GET "/ff_graph" [] d3_test)
-	(GET "/ff_data" [] transit)
-	(GET "/ff_data2" [] transit2)
+	(GET "/ff_data" _ (transit_write full_input))
+	(GET "/ff_data2" _ (transit_write output3))
 	(GET "/content" [] (friend/authenticated (content)))
-	; (GET "/request" [] str)
-	(GET "/requires-authentication" req
-		(friend/authenticated "Thanks for authenticating!"))
+	(GET "/content_raw/:text" req (transit_write (get content_dict (get (:params req) :text))))
 	; (GET "/role-user" req
 	;	(friend/authorize #{:webapp.core/user :webapp.core/admin} "You're a user!"))
 	; (GET "/role-admin" req
