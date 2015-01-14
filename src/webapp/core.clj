@@ -44,7 +44,9 @@
 	{:header {"Content-Type" "application/transit+json"}
 	:body (write output)})
 
-(def content_dict {"beowulf_raw" beowulf_raw "wanderer_raw" wanderer_raw})
+(def beowulf_json (generate-string ["text" beowulf_raw]))
+
+(def content_dict {"beowulf_raw" beowulf_json "wanderer_raw" wanderer_raw})
 
 (defroutes router*
 	(GET "/" [] homepage_ctrl)
@@ -60,7 +62,7 @@
 	(GET "/ff_data" _ (transit_write full_input))
 	(GET "/ff_data2" _ (transit_write output3))
 	(GET "/content" [] (friend/authenticated (content)))
-	(GET "/content_raw/:text" req (transit_write (get content_dict (get (:params req) :text))))
+	(GET "/content_raw/:text" req (get content_dict (get (:params req) :text)))
 	; (GET "/role-user" req
 	;	(friend/authorize #{:webapp.core/user :webapp.core/admin} "You're a user!"))
 	; (GET "/role-admin" req

@@ -42,10 +42,13 @@
         [:body
         [:h2 "Beowulf"]
         [:div {:style "overflow:hidden;width:100%"}
-            [:script {:type "text/javascript" :src "http://d3js.org/d3.v3.min.js"}]
-            [:script {:type "text/javascript" :src "/js/content_text.js"}]
-            [:div {:id "scroll" :class "main" :style "height:500px;overflow:scroll;float:left"}]
+            [:div {:id "scroll_main" :class "main" :style "height:500px;overflow:scroll;float:left"}
+            [:p {:id "scroll_results"}]]
             [:div {:style "height:100px;margin-left:600px;padding:0px"} 
                 [:div (mb_post_content_2)]
-                [:div {:style "height:400px;overflow:scroll;padding:0px"}
-                    (map html_post_content (posts))]]]])))
+                [:div {:id "scroll_posts" :style "height:400px;overflow:scroll;padding:0px"}
+                    (map html_post_content (posts))]]]
+        [:div {:class "internal" :style "height:5px"}]
+            [:button {:id "wanderer" :style "margin-left:50px"} "Give me Beowulf!"]
+            [:script {:type "text/javascript" :src "/goog/base.js"}]
+            [:script {:type "text/javascript" :src "/js/content_text.js"}]])))
