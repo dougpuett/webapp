@@ -3,10 +3,10 @@
     (:require
         [webapp.ff_home :refer :all]
         [cheshire.core :refer :all]
-        [webapp.html_helpers :refer :all]
-        [webapp.html_post :refer :all]
-        [webapp.microblog_home :refer :all]
-        [webapp.beowulf :refer :all]
+        [views.html_helpers :refer :all]
+        [views.html_post :refer :all]
+        [apis.posts :refer :all]
+        [views.beowulf :refer :all]
         [webapp.logging :refer :all]
         [webapp.site_stats :refer :all]
         [garden.core :refer [css]]
@@ -69,9 +69,11 @@
 
 (defn microblog_publish_ctrl [request] (let [message (:message (:params request))] (do 
     (log request "microblog_post" "publish" (:remote-addr request) {:message message}) 
-    (mb_post_post message))))
+    (mb_post_return message))))
 
 (defn site_stats_ctrl [request] (do 
     (log request "site_stats" "page-view" (:remote-addr request) {}) 
     (stats-output)))
+
+(defn post_ctrl [request] (friend/authenticated (json_posts)))
 

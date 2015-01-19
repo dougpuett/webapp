@@ -1,7 +1,7 @@
 (ns webapp.site_stats
  (:refer-clojure :exclude [sort find second extend])
  (:require
-    [webapp.html_helpers :refer :all]
+    [views.html_helpers :refer :all]
     [taoensso.carmine :as car :refer (wcar)]
     [hiccup.core :refer :all]
     [webapp.logging :refer :all]

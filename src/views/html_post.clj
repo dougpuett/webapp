@@ -1,7 +1,7 @@
-(ns webapp.html_post
+(ns views.html_post
  (:refer-clojure :exclude [sort find])
  (:require
-    [webapp.html_helpers :refer :all]
+    [views.html_helpers :refer :all]
     [hiccup.core :refer :all]))
 
 ;; =====================

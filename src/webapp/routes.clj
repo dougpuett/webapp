@@ -1,13 +1,14 @@
-(ns webapp.core
+(ns webapp.routes
 	(:refer-clojure :exclude [find])
 	(:import org.mindrot.jbcrypt.BCrypt)
 	(:import (java.io ByteArrayOutputStream))
 	(:require (compojure handler route core response)
 			[ring.util.response :as response]
 			[ring.middleware.params :refer :all]
+			[apis.posts :refer :all]
 			[webapp.controllers :refer :all]
-			[webapp.beowulf :refer :all]
-			[webapp.beowulf_raw :refer :all]
+			[views.beowulf :refer :all]
+			[apis.beowulf_raw :refer :all]
 			[compojure.core :refer :all]
 			[compojure.response :refer :all]
 			[compojure.handler :refer :all]
@@ -45,8 +46,9 @@
 	:body (write output)})
 
 (def beowulf_json (generate-string ["text" beowulf_raw]))
+(def wanderer_json (generate-string ["text" wanderer_raw]))
 
-(def content_dict {"beowulf_raw" beowulf_json "wanderer_raw" wanderer_raw})
+(def content_dict {"beowulf_raw" beowulf_json "wanderer_raw" wanderer_json})
 
 (defroutes router*
 	(GET "/" [] homepage_ctrl)
@@ -58,6 +60,7 @@
 	(POST "/microblog_post" [] microblog_publish_ctrl)
 	(POST "/microblog_post_content" req (do (microblog_publish_ctrl req) (response/redirect "/content")))
 	(GET "/site_stats" [] site_stats_ctrl)
+	(GET "/my_posts" [] post_ctrl)
 	(GET "/ff_graph" [] d3_test)
 	(GET "/ff_data" _ (transit_write full_input))
 	(GET "/ff_data2" _ (transit_write output3))

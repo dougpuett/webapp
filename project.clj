@@ -11,6 +11,7 @@
                  [com.novemberain/monger "2.0.0"]
                  [cheshire "5.3.1"]
                  [clj-time "0.8.0"]
+                 [hiccups "0.3.0"]
                  [garden "1.2.5"]
                  [org.clojure/clojurescript "0.0-2665"]
                  [net.drib/strokes "0.5.1"]
@@ -25,9 +26,9 @@
   :plugins [[lein-ring "0.8.11"]
             [lein-npm "0.4.0"]
             [lein-cljsbuild "1.0.4-SNAPSHOT"]]
-  :main ^:skip-aot webapp.core
+  :main ^:skip-aot webapp.routes
 ;  :target-path "target/%s"
-  :ring {:handler webapp.core/router}
+  :ring {:handler webapp.routes/router}
   :hooks [leiningen.cljsbuild]
   :cljsbuild {
     :builds [{

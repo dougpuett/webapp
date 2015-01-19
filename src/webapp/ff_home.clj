@@ -1,6 +1,6 @@
 (ns webapp.ff_home
 	(:require [hiccup.core :refer :all]
-		[webapp.html_helpers :refer :all]))
+		[views.html_helpers :refer :all]))
 
 (def ff (str site_header (html [:body [:h2 "Championship Odds:"]
 	[:div {:class "main"} [:h3 "Before Week 1:"][:p "What's Fappening 42.2%, Team Freedman 29.3%, Bill and Ted's ExcellentAdv 15.5%, Champ's Smelly Meat 13.0%"]]

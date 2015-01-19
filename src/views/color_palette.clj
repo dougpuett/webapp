@@ -1,4 +1,4 @@
-(ns webapp.color_palette)
+(ns views.color_palette)
 
 (def orange ["#AA6C39" "#FFD0AA" "#D49A6A" "#804616" "#552700"])
 (def yellow ["#AA8439" "#FFE3AA" "#D4B16A" "#805C16" "#553900"])

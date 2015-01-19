@@ -1,8 +1,8 @@
-(ns webapp.html_helpers
+(ns views.html_helpers
 	(:refer-clojure :exclude [second extend])
 	(:require [hiccup.core :refer :all]
 			[clj-time.coerce :refer :all]
-			[webapp.color_palette :refer :all]
+			[views.color_palette :refer :all]
 			[clj-time.format :refer :all]
 			[clj-time.local :as l]
 		 	[garden.core :refer [css]]))
