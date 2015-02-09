@@ -9,6 +9,9 @@
 
 (defn linkify [link text] (html [:a {:href link} text]))
 
+;; =========================================================================================
+;; MOVE TO API
+;; =========================================================================================
 (def today-formatter (formatter "HH:mm, MM/dd"))
 (def legacy-formatter (formatter "MM/dd/yyyy"))
 
@@ -19,6 +22,8 @@
 		legacy-formatter
 		today-formatter)
 	 (l/to-local-date-time (clj-time.coerce/from-long timestamp)))))
+;; =========================================================================================
+
 
 (def background-style "linear-gradient(to right, #99CCFF, #7AA3CC, #99CCFF)")
 (def site_style (css 
@@ -28,6 +33,7 @@
 	[:h2 {:border-radius "6px" :padding "10px" :margin-left "50px" :width "485px" :background-color "white"}]
 	[:.internal {:background background-style}]
 	[:input {:border-radius "5px" :border "1px solid black"}]
+	[:.tag {:background-color "#2E4372" :border-radius "5px" :border "1px solid black"}]
 	[:a:link {:color "#4C6680"}]
 	[:a:visited {:color "#4C6680"}]
 	[:textarea {:outline "none" :resize "none" :font-size "16px"}]
@@ -48,3 +54,4 @@
 	(let [this_color (get blue 3)] (vector :.graph_object_12 {:stroke this_color :fill this_color}))))
 
 (def site_header (html [:head [:meta {:charset "utf-8"}][:style site_style]]))
+(defn html_wrap [title content] (html [:head [:meta {:charset "utf-8"}][:title title][:style site_style]][:body content]))

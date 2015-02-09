@@ -4,6 +4,7 @@
       [org.bson.types ObjectId]
       [com.mongodb DB WriteConcern])
  (:require
+    [clojure.java.io :as io]
     [monger.core :as mg]
     [hiccup.core :refer :all]
     [cheshire.core :refer :all]
@@ -57,6 +58,3 @@
     coll "micro"]
   (mc/insert db coll {:message (html-sanitize policy message)}))
   (json_posts)))
-
-
-

@@ -14,3 +14,9 @@ target/classes/META_INF/maven/webapp/webapp/pom.properties
 .repl
 .*ec-init.clj
 *.ec-init.clj
+resources/public/goog/*.
+resources/public/cljs/*
+resources/public/goog/*
+resources/public/clojure/*
+*init.clj
+target/*

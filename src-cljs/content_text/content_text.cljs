@@ -10,6 +10,8 @@
 		[goog.net Jsonp]
 		[goog Uri]))
 
+;; IMPLEMENT THIS: http://jsfiddle.net/W33YR/3/
+
 
 ;; CORE.ASYNC
 
@@ -85,11 +87,19 @@
 		(apply str
 			(for [result (js->clj results)]
 				(str
-				"<div class=\"main\" style=\"margin-left:0;padding-top:5px;padding-bottom:5px;margin-bottom:4px;\"><div style=\"margin-left:10px;margin-right:0px\"><b>Doug Puett </b><span style=\"color:grey\">"
-				(get result "time") 
-				"</span></div><div style=\"height:5px\"></div><div style=\"margin-left:10px;margin-right:5px\">" 
-				(get result "message")
-				"</div></div>")))
+				"<div class=\"main\" style=\"margin-left:0;padding-top:5px;padding-bottom:5px;margin-bottom:4px;\">
+					<div style=\"margin-left:10px;margin-right:0px\">
+						<b>Doug Puett </b>
+						<span style=\"color:grey\">"
+							(get result "time") 
+						"</span>
+					</div>
+					<div style=\"height:5px\">
+					</div>
+					<div style=\"margin-left:10px;margin-right:5px\">" 
+					(get result "message")
+					"</div
+				></div>")))
 		"</div>"))
 
 (defn user-message []
@@ -106,7 +116,6 @@
 		  (<! clicks)
 		  (let [[_ results]  (<! (my_xhr_post "/microblog_post" (user-message)))
 		  		results-view (dom/getElement "scroll_posts")]
-		  			(set! (.-val textarea_div) "")
-				  	#_(set! (.-innerHTML results-view) (render-posts results)))))))
+				  	(set! (.-innerHTML results-view) (render-posts results)))))))
 
 (init_poster)

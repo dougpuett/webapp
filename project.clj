@@ -13,6 +13,7 @@
                  [clj-time "0.8.0"]
                  [hiccups "0.3.0"]
                  [garden "1.2.5"]
+                 [markdown-clj "0.9.62"]
                  [org.clojure/clojurescript "0.0-2665"]
                  [net.drib/strokes "0.5.1"]
                  [com.taoensso/carmine "2.9.0"]
@@ -31,7 +32,7 @@
   :ring {:handler webapp.routes/router}
   :hooks [leiningen.cljsbuild]
   :cljsbuild {
-    :builds [{
+    :builds [#_{
         ; The path to the top-level ClojureScript source directory:
         :source-paths 
           ; ["src-cljs/ff_season.cljs"] ;; "../target/classes"] ?? see http://swannodette.github.io/2014/12/22/waitin/

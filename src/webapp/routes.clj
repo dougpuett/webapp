@@ -1,96 +1,106 @@
 (ns webapp.routes
 	(:refer-clojure :exclude [find])
-	(:import org.mindrot.jbcrypt.BCrypt)
-	(:import (java.io ByteArrayOutputStream))
 	(:require (compojure handler route core response)
-			[ring.util.response :as response]
-			[ring.middleware.params :refer :all]
-			[apis.posts :refer :all]
-			[webapp.controllers :refer :all]
-			[views.beowulf :refer :all]
-			[apis.beowulf_raw :refer :all]
-			[compojure.core :refer :all]
-			[compojure.response :refer :all]
-			[compojure.handler :refer :all]
-			[taoensso.carmine :as car :refer (wcar)]
-			[ring.adapter.jetty :only (run-jetty)]
-			[cognitect.transit :as transit]
-			[cheshire.core :refer :all]
-			[clojure.java.io :as io]
-			[cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])))
+		[cheshire.core :refer :all]
+		[cognitect.transit :as transit]
+		[compojure.core :refer :all]
+		[compojure.response :refer :all]
+		[compojure.handler :refer :all]
+		[ring.adapter.jetty :only (run-jetty)]
+		[ring.util.response :as response]
+		[ring.middleware.params :refer :all]
+		[taoensso.carmine :as car :refer (wcar)]
+		[apis.posts :refer :all]
+		[apis.ff_data :refer :all]
+		[views.beowulf :refer :all]
+		[webapp.controllers :refer :all]
+		[webapp.password_admin :refer :all]
+		[cemerick.friend :as friend] (cemerick.friend [workflows :as workflows] [credentials :as creds])))
 
-(def full_input (mapv parse-string (clojure.string/split (slurp (io/file (io/resource "fullmap.json"))) #"\n")))
+;; =================
+;; FILE DESCRIPTION:
+;; =================
 
-(def output2 (into [] (flatten (for [[team weeks] (group-by #(get % "team") full_input)] 
-	(let [sorted-weeks (sort-by #(get % "week") weeks)]
-		(map #(hash-map 
-			"team" team 
-			"x1" (get %1 "week") 
-			"y1" (get %1 "odds") 
-			"x2" (get %2 "week") 
-			"y2" (get %2 "odds")) 
-		sorted-weeks (rest sorted-weeks)))))))
-
-(def output3 (vec (concat output2 (take 25 output2))))
-
-(defn write [x]
-  (let [baos (ByteArrayOutputStream.)
-        w    (transit/writer baos :json)
-        _    (transit/write w x)
-        ret  (.toString baos)]
-    (.reset baos)
-    ret))
-
-(defn transit_write [output]
-	{:header {"Content-Type" "application/transit+json"}
-	:body (write output)})
-
-(def beowulf_json (generate-string ["text" beowulf_raw]))
-(def wanderer_json (generate-string ["text" wanderer_raw]))
-
-(def content_dict {"beowulf_raw" beowulf_json "wanderer_raw" wanderer_json})
+;; THIS FILE MAPS ROUTES TO FUNCTIONS. EACH ROUTE CALLS A FUNCTION THAT EITHER RETURNS HTML OR RAW DATA IN JSON FORM. IT ALSO CONTAINS A RING WRAPPER THAT TAKES CARE OF AUTHENTICATION BY CALLING A REDIS SERVER.
 
 (defroutes router*
+	;; ==========
+	;; SITE INDEX
+	;; ==========
+
 	(GET "/" [] homepage_ctrl)
 	(GET "/login" [] login-form)
 	(GET "/logout" request (friend/logout* (response/redirect (str (:context request) "/"))))
-	(GET "/ff" [] fantasy-football_ctrl)
+	(GET "/site_stats" [] site_stats_ctrl)
+	
+	;; =====
+	;; BLOGS
+	;; =====
+
+	(GET "/my_posts" [] post_ctrl)
+
 	(GET "/microblog" [] microblog_ctrl)
 	(GET "/microblog/post" [] microblog_post_ctrl)
 	(POST "/microblog_post" [] microblog_publish_ctrl)
-	(POST "/microblog_post_content" req (do (microblog_publish_ctrl req) (response/redirect "/content")))
-	(GET "/site_stats" [] site_stats_ctrl)
-	(GET "/my_posts" [] post_ctrl)
-	(GET "/ff_graph" [] d3_test)
-	(GET "/ff_data" _ (transit_write full_input))
-	(GET "/ff_data2" _ (transit_write output3))
-	(GET "/content" [] (friend/authenticated (content)))
-	(GET "/content_raw/:text" req (get content_dict (get (:params req) :text)))
+
+	(GET "/blog" [] blog_ctrl)
+	(GET "/blog_index" [] blog_index_ctrl)
+	(GET "/blog_posts_raw/:uri" req file_text)
+	(GET "/blog_posts_raw/:year/:month/:day/:title" req 
+		(file_text (assoc-in req [:params :uri] 
+			(let 
+				[params (:params req) 
+				year (:year params)
+				month (:month params)
+				day (:day params)
+				title (:title params)] (str year "/" month "/" day "/" title)))))
+
+	(GET "/blog_posts/:uri" req file_text_decorated)
+	(GET "/blog_posts/:year/:month/:day/:title" req 
+		(file_text_decorated (assoc-in req [:params :uri] 
+			(let 
+				[params (:params req) 
+				year (:year params)
+				month (:month params)
+				day (:day params)
+				title (:title params)] (str year "/" month "/" day "/" title)))))
+
+	;; ================
+	;; FANTASY FOOTBALL
+	;; ================
+
+	(GET "/ff" [] fantasy-football_ctrl)
+	;(GET "/ff_graph" [] d3_test)
+	;(GET "/ff_data" _ (transit_write full_input))
+	;(GET "/ff_data2" _ (transit_write output3))
+
+	;; =======
+	;; CONTENT
+	;; =======
+
+	(GET "/content" req (friend/authenticated (content_ctrl req)))
+	(GET "/content_raw/:text" req content_data_ctrl)
+
+	;; ====================
+	;; AUTHENTICATION TESTS
+	;; ====================
+
 	; (GET "/role-user" req
 	;	(friend/authorize #{:webapp.core/user :webapp.core/admin} "You're a user!"))
 	; (GET "/role-admin" req
 	; 	(friend/authorize #{:webapp.core/admin} "You're an admin!"))
+	; (GET "/request/:test" req (str req))
+	
+	;; ================
+	;; COMPOJURE EXTRAS
+	;; ================
+	
 	(compojure.route/resources "/")
 	(compojure.route/not-found "Link not found."))
 
-;; =====================
-;; REDIS AUTHENTICATION:
-;; =====================
-(def server1-conn {:pool {} :spec {:host "127.0.0.1" :port 6379}})
-(defmacro wcar* [& body] `(car/wcar server1-conn ~@body))
-(defn get_roles_from_redis [username] (wcar* (car/get (str "password:" username))))
-
-(defn redis-credentials
-	"This will be a function that takes a map {:username X :password Y} and returns {:username X :roles Z} iff hash(Y) = Y' (hashed password in redis)."
-		[{:keys [username password]}]
-		(let [{:keys [roles hashed-password]} (get_roles_from_redis username)]
-			(if 
-				(nil? hashed-password)
-				nil
-					(if 
-						(BCrypt/checkpw password hashed-password)
-						{:username username :roles roles}
-						nil))))
+;; ===============
+;; AUTHENTICATION:
+;; ===============
 
 (def secured-app (friend/authenticate
 	router*

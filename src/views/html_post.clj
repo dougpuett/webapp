@@ -13,7 +13,8 @@
 		[:div {:class "main" :style "padding-top:5px;padding-bottom:5px;margin-bottom:4px;"}
 		[:div {:style "margin-left:10px;margin-right:5px"} 
 			[:b "Doug Puett "]
-			[:span {:style "color:grey"} (parse_time (str (:_id post)))]]
+			[:span {:style "color:grey"} (parse_time (str (:_id post)))]
+				#_[:div {:class "tag"} "Who do we 'ave ere?"]]
 		[:div {:style "height:5px"}]
 		[:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
 		]))
