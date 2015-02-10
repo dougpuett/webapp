@@ -1,5 +1,4 @@
 (ns apis.blog_posts
- (:refer-clojure :exclude [sort find])
  (:require
     [markdown.core :refer :all]
     [clojure.java.io :as io]
@@ -66,7 +65,7 @@
 
 (def all-posts (filter #(all-posts-filter (get % 3)) all-posts-raw))
 
-(def blog-all-posts (reverse (map #(clojure.string/join #"/" %) all-posts)))
+(def blog-all-posts (reverse (sort (map #(clojure.string/join #"/" %) all-posts))))
 
 
 
