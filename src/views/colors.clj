@@ -1,4 +1,8 @@
-(ns views.color_palette)
+(ns views.colors
+	(:refer-clojure :exclude [second extend])
+	(:require [hiccup.core :refer :all]
+			  [garden.core :refer [css]]
+			  [garden.color :as color :refer [hsl rgb]]))
 
 (def orange ["#AA6C39" "#FFD0AA" "#D49A6A" "#804616" "#552700"])
 (def yellow ["#AA8439" "#FFE3AA" "#D4B16A" "#805C16" "#553900"])
@@ -15,7 +19,24 @@
 (def pink ["#9571A8" "#DFD2E6" "#BCA2C9" "#774A8D" "#572870"])
 
 
-#_(def new_red (rgb 44 25 25))
+(def new_red (rgb 44 25 25))
+(def new_grey (rgb 38 38 38))
+(def new_light_grey (rgb 52 52 52))
+(def new_yellow (rgb 246 191 40))
+(def new_white (rgb 209 209 209))
+(def new_bright_red (rgb 170 30 30))
+
 
 #_(def theme ["#363e59" "#f2f2f2" "#115945" "#bf8773" "#8c513b"])
-#_(def theme ["#363e59" "#f2f2f2" new_red "#bf8773" "#8c513b"])
+#_(def theme ["#363e59" "#f2f2f2" "#115945" new_red "#8c513b"])
+
+(def theme {
+	:background new_grey
+	:field new_light_grey 
+	:accent new_bright_red 
+	:text-accent new_yellow 
+	:text new_white})
+
+
+
+

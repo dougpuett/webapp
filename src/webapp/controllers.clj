@@ -32,6 +32,8 @@
 
 ;;    2. COMBINE DATA AND HTML WRAPPERS
 
+;; PROGRESSION SHALL BE MADE BY PUSHING LOGICAL SYSTEMS AND DESIGN SYSTEMS APART AS WELL AS SEGMENTING THIS FILE INTO SEPERATE PRODUCT LINES THAT ARE AS DISCRETE AS POSSIBLE.
+
 ;; ===================
 ;; SITE ADMINISTRATION
 ;; ===================
@@ -42,13 +44,13 @@
     [:h2 "Doug's Website"]
     [:div {:class "main" :style "padding-bottom:5px"}
     [:p {:style "padding:15px;padding-bottom:0px"} [:b "Pages:"]]
+    [:ul (linkify "blog" "Blog")]
     [:ul (linkify "microblog" "Micro-Blog")]
     #_[:ul (linkify "ff" "Fantasy Football")]
     #_[:ul (linkify "ff_graph" "FF Graph (D3.js Example)")]
+    [:ul (linkify "content" "Content App")]
     [:ul "FF Graph"]
-    [:ul (linkify "blog" "Full Blog")]
     #_[:ul "Full Blog"]
-    [:ul (linkify "content" "Poetry Reader")]
     [:ul (linkify "site_stats" "Site Statistics")]
     ]])))
 
@@ -106,7 +108,7 @@
             #(prettify-title (destructure-title %))
             blog-all-posts)))])))
 
-(defn decorate-blog-map [blog-map] (html [:h2 (:title blog-map)][:h2 (:date blog-map)][:div {:class "main" :style "width:1000px"} (:text blog-map)]))
+(defn decorate-blog-map [blog-map] (html [:h2 (:title blog-map)][:h3 (:date blog-map)][:div {:class "blog-text" :style "width:1000px"} (:text blog-map)]))
 
 (defn blog_data [_] (html_wrap "Doug's Blog" (map #(decorate-blog-map (blog-map %)) blog-all-posts)))
 
