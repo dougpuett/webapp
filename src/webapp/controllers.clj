@@ -1,15 +1,18 @@
 (ns webapp.controllers
     (:refer-clojure :exclude [sort find])
     (:require
-        [apis.beowulf_raw :refer :all]
-        [apis.ff_data :refer :all]
-        [apis.blog_posts :refer :all]
-        [apis.posts :refer :all]
+        [clojure.java.io :as io]
+        
+        [data.beowulf_raw :refer :all]
+        [data.ff_data :refer :all]
+        [data.blog_posts :refer :all]
+        [data.posts :refer :all]
 
         [views.html_helpers :refer :all]
         [views.html_post :refer :all]
         [views.beowulf :refer :all]
 
+        [webapp.time :refer :all]
         [webapp.logging :refer :all]
         [webapp.site_stats :refer :all]
         [webapp.ff_home :refer :all]
@@ -73,10 +76,13 @@
     (log request "site_stats" "page-view" (:remote-addr request) {}) 
     (stats-output)))
 
+(defn webinar [request] (io/file (io/resource "core.async-webinar/index.html")))
 
 ;; =========
 ;; MICROBLOG
 ;; =========
+;; functions needed: microblog, mb_post, mb_post_return, json_posts
+(defn microblog [] (microblog_html posts))
 
 (defn microblog_ctrl [request] (do 
     (log request "microblog" "page-view" (:remote-addr request) {}) 
@@ -86,9 +92,15 @@
     (log request "microblog_post" "page-view" (:remote-addr request) {}) 
     (mb_post))))
 
-(defn microblog_publish_ctrl [request] (let [message (:message (:params request))] (do 
+(defn microblog_publish_return_ctrl [request] (let [message (:message (:params request))] (do 
     (log request "microblog_post" "publish" (:remote-addr request) {:message message}) 
     (mb_post_return message))))
+
+
+(defn microblog_publish_ctrl [request] (let [message (:message (:params request))] (do 
+    (log request "microblog_post" "publish" (:remote-addr request) {:message message})
+    (mb_post_return message)
+    message_submitted)))
 
 (defn post_ctrl [request] (friend/authenticated (json_posts)))
 

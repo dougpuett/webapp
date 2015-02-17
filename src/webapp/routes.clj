@@ -10,8 +10,8 @@
 		[ring.util.response :as response]
 		[ring.middleware.params :refer :all]
 		[taoensso.carmine :as car :refer (wcar)]
-		[apis.posts :refer :all]
-		[apis.ff_data :refer :all]
+		[data.posts :refer :all]
+		[data.ff_data :refer :all]
 		[views.beowulf :refer :all]
 		[webapp.controllers :refer :all]
 		[webapp.password_admin :refer :all]
@@ -32,16 +32,17 @@
 	(GET "/login" [] login-form)
 	(GET "/logout" request (friend/logout* (response/redirect (str (:context request) "/"))))
 	(GET "/site_stats" [] site_stats_ctrl)
-	
+	(GET "/webinar" [] webinar)
 	;; =====
 	;; BLOGS
 	;; =====
 
-	(GET "/my_posts" [] post_ctrl)
+	(GET "/my_posts" [] post_ctrl) ;; this is data. this is good.
 
-	(GET "/microblog" [] microblog_ctrl)
-	(GET "/microblog/post" [] microblog_post_ctrl)
-	(POST "/microblog_post" [] microblog_publish_ctrl)
+	(GET "/microblog" [] microblog_ctrl) ;; decorated post data
+	(GET "/microblog/post" [] microblog_post_ctrl) ;; decorated post box
+	(POST "/microblog_post" [] microblog_publish_ctrl) ;; returns html page
+	(POST "/microblog_post_return" [] microblog_publish_return_ctrl) ;; returns json
 
 	(GET "/blog" [] blog_ctrl)
 	(GET "/blog_index" [] blog_index_ctrl)

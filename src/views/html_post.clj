@@ -1,6 +1,7 @@
 (ns views.html_post
  (:refer-clojure :exclude [sort find])
  (:require
+ 	[webapp.time :refer :all]
     [views.html_helpers :refer :all]
     [hiccup.core :refer :all]))
 
@@ -12,10 +13,11 @@
 	(html 
 		[:div {:class "main" :style "padding-top:5px;padding-bottom:5px;margin-bottom:4px;"}
 		[:div {:style "margin-left:10px;margin-right:5px"} 
-			[:b "Doug Puett "]
-			[:span {:style "color:grey"} (parse_time (str (:_id post)))]
-				#_[:div {:class "tag"} "Who do we 'ave ere?"]]
-		[:div {:style "height:5px"}]
+			[:div {:style "float:left;margin-right:2px"} [:b "Doug Puett"]]
+			[:div {:style "color:grey;float:left;padding:1px;margin-right:2px;margin-left:2px"} (parse_time (str (:_id post)))]
+			#_[:div {:style "background-color:red;float:left;padding:2px;border-radius:5px;margin-right:2px;margin-left:2px"} "wamp"]]
+		[:br]
+		[:div {:style "height:10px"}]
 		[:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
 		]))
 

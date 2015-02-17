@@ -52,7 +52,14 @@
          :compiler {
           :output-to "resources/public/js/content_text.js"
           :optimizations :whitespace
-          :pretty-print false}}          
+          :pretty-print false}}
+        {:source-paths ["src-cljs/webinar"]
+         :id "content"
+         :cache-analysis true
+         :compiler {
+          :output-to "resources/public/js/webinar.js"
+          :optimizations :whitespace
+          :pretty-print false}}                    
         ]}
 ;  :profiles {:uberjar {:aot :all}}
 )

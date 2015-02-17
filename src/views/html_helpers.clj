@@ -1,30 +1,12 @@
 (ns views.html_helpers
 	(:refer-clojure :exclude [second extend])
 	(:require [hiccup.core :refer :all]
-			[clj-time.coerce :refer :all]
-			[views.colors :refer :all]
-			[clj-time.format :refer :all]
-			[clj-time.local :as l]
+			[views.colors :refer :all]		
 			[garden.units :as u :refer [px pt]]
 			[garden.color :as color :refer [hsl rgb]]
 		 	[garden.core :refer [css]]))
 
 (defn linkify [link text] (html [:a {:href link} text]))
-
-;; =========================================================================================
-;; MOVE TO API
-;; =========================================================================================
-(def today-formatter (formatter "HH:mm, MM/dd"))
-(def legacy-formatter (formatter "MM/dd/yyyy"))
-
-(defn parse_time [mongo_time] (let [timestamp (* 1000 (Integer/parseInt (apply str (take 8 mongo_time)) 16))]
-	(unparse 
-	(if 
-		(> (- (clj-time.coerce/to-long (clj-time.core/now)) 86400000) timestamp)
-		legacy-formatter
-		today-formatter)
-	 (l/to-local-date-time (clj-time.coerce/from-long timestamp)))))
-;; =========================================================================================
 
 
 #_(def background-style "linear-gradient(to right, #99CCFF, #7AA3CC, #99CCFF)")

@@ -1,7 +1,8 @@
 (ns views.beowulf
     (:require
-        [apis.beowulf_raw :refer :all]
-        [apis.posts :refer :all]
+        [data.beowulf_raw :refer :all]
+        [data.posts :refer :all]
+        [webapp.time :refer :all]
         [views.html_helpers :refer :all]
         [hiccup.core :refer :all]))
 
@@ -15,7 +16,8 @@
         [:div {:class "main" :style "margin-left:0;padding-top:5px;padding-bottom:5px;margin-bottom:4px;"}
         [:div {:style "margin-left:10px;margin-right:0px"} 
             [:b "Doug Puett "]
-            [:span {:style "color:grey"} (parse_time (str (:_id post)))]]
+            [:span {:style "color:grey"} (parse_time (str (:_id post)))]
+            #_[:span {:style "color:blue"} "wamp"]]
         [:div {:style "height:5px"}]
         [:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
         ]))

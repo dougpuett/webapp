@@ -10,11 +10,11 @@
 		[goog.net Jsonp]
 		[goog Uri]))
 
+;; IMPLEMENT THIS: http://jsfiddle.net/W33YR/3/
+
+
 ;; CORE.ASYNC
 
-;; the listen function takes an element and a response type, and then creates a listener that fires put! when the element and type are hit.
-;; I don't know what the "e" is or where it comes from.
-;; A parked channel is return with value "e", which may be the name of the element (?)
 (defn listen [el type]
   (let [out (chan)]
 	(events/listen el type
@@ -26,16 +26,10 @@
 		(XhrIo.send uri (fn [res] (put! out (.getResponseJson (.-target res)))))
 		out))
 
-
-;; the my_xhr_post function takes a url and a message, creates a channel called "out", then puts the response of the post into that channel and returns it.
 (defn my_xhr_post [uri message]
 	(let [out (chan)]
 		(XhrIo.send uri (fn [res] (put! out (.getResponseJson (.-target res)))) "POST" (str "message=" message))
 			out))
-
-
-(defn simple_xhr_post [uri message]
-	(XhrIo.send uri (fn [res] (.getResponseJson (.-target res))) "POST" (str "message=" message)))
 
 ; (str "message=this is my message")
 ; (str "{\"message\":\"" message "\"}")
@@ -108,20 +102,19 @@
 				></div>")))
 		"</div>"))
 
-(def textarea_div (dom/getElement "post_text"))
-
 (defn user-message []
-  (.-value textarea_div))
+  (.-value (dom/getElement "post_text")))
+
+(def textarea_div (dom/getElement "post_text"))
 
 (def textarea "<textarea cols=\"25\" form=\"microblog\" name=\"message\" placeholder=\"Note Goes here.\" rows=\"5\"></textarea>")
 
-;; why is (<! (put! ...)) a necessary construction when doing server calls?
 (defn init_poster []
   (let [clicks (listen (dom/getElement "post_button") "click")
 		results-view (dom/getElement "scroll_posts")]
 	(go (while true
-		  (<! clicks) ;; this parks the while loop until we get a click
-		  (let [[_ results] (<! (my_xhr_post "/microblog_post_return" (user-message)))
+		  (<! clicks)
+		  (let [[_ results]  (<! (my_xhr_post "/microblog_post" (user-message)))
 		  		results-view (dom/getElement "scroll_posts")]
 				  	(set! (.-innerHTML results-view) (render-posts results)))))))
 
