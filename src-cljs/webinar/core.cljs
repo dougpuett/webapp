@@ -1,3 +1,5 @@
+;; this is from swannodette's webcast where he gives core.async examples. This is not my work.
+
 (ns webinar.core
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.core.async :as async

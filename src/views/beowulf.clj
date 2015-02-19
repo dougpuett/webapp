@@ -1,15 +1,8 @@
 (ns views.beowulf
     (:require
-        [data.beowulf_raw :refer :all]
-        [data.posts :refer :all]
         [webapp.time :refer :all]
         [views.html_helpers :refer :all]
         [hiccup.core :refer :all]))
-
-(def beowulf 
-    [:div 
-        {:class "main" :style "height:500px;overflow:scroll;float:left"} 
-        (map #(vector :p %) beowulf_raw)])
 
 (defn html_post_content [post] 
     (html 
@@ -38,7 +31,7 @@
     [:button {:id "post_button" :type "submit" :value "Submit" :form "microblog"} "Submit"]
     [:div {:style "height:10px"}]]))
 
-(defn content [] (str 
+(defn content [posts] (str 
     site_header 
     (html
         [:body

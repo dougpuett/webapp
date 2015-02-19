@@ -148,7 +148,7 @@
 
 (defn content_ctrl [request] (do
     (log request "content reader" "page-view" (:remote-addr request) {})
-    (content)))
+    (content posts)))
 
 (defn content_data_ctrl [request] (get content_dict (get (:params request) :text)))
 
