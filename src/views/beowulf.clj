@@ -1,6 +1,9 @@
 (ns views.beowulf
     (:require
+        [cheshire.core :refer :all]
         [webapp.time :refer :all]
+        [data.posts :refer :all]
+        [views.html_post :refer :all]
         [views.html_helpers :refer :all]
         [hiccup.core :refer :all]))
 
@@ -42,7 +45,7 @@
             [:div {:style "height:100px;margin-left:600px;padding:0px"} 
                 [:div (mb_post_content_2)]
                 [:div {:id "scroll_posts" :style "height:400px;overflow:scroll;padding:0px"}
-                    (map html_post_content (posts))]]]
+                    (map html_post_left (second (parse-string (json_posts))))]]]
         [:div {:class "internal" :style "height:5px"}]
             [:button {:id "beowulf" :style "margin-left:50px"} "Beowulf!"]
             [:button {:id "wanderer" :style "margin-left:50px"} "The Wanderer!"]

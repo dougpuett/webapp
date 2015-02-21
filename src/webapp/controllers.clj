@@ -82,7 +82,7 @@
 ;; MICROBLOG
 ;; =========
 ;; functions needed: microblog, mb_post, mb_post_return, json_posts
-(defn microblog [] (microblog_html posts))
+(defn microblog [] (microblog_html (second (parse-string (json_posts)))))
 
 (defn microblog_ctrl [request] (do 
     (log request "microblog" "page-view" (:remote-addr request) {}) 

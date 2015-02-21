@@ -11,7 +11,6 @@
                  [com.novemberain/monger "2.0.0"]
                  [cheshire "5.3.1"]
                  [clj-time "0.8.0"]
-                 [hiccups "0.3.0"]
                  [garden "1.2.5"]
                  [markdown-clj "0.9.62"]
                  [org.clojure/clojurescript "0.0-2665"]

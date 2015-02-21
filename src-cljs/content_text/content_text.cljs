@@ -86,26 +86,22 @@
 (init_clear)
 
 ;; POSTS
+(defn str_tags [tags] (apply str (map #(str "<div class=\"microblog-tag\">" % "</div>") tags)))
 
-(defn render-posts [results] 
-	(str
-		"<div>"
-		(apply str
-			(for [result (js->clj results)]
-				(str
-				"<div class=\"main\" style=\"margin-left:0;padding-top:5px;padding-bottom:5px;margin-bottom:4px;\">
-					<div style=\"margin-left:10px;margin-right:0px\">
-						<b>Doug Puett </b>
-						<span style=\"color:grey\">"
-							(get result "time") 
-						"</span>
-					</div>
-					<div style=\"height:5px\">
-					</div>
-					<div style=\"margin-left:10px;margin-right:5px\">" 
-					(get result "message")
-					"</div
-				></div>")))
+(defn render-posts [results] (str
+	"<div>"
+	(apply str
+		(for [result (js->clj results)]
+			(apply str 
+			"<div class=\"main\" style=\"margin-left:0\"><div style=\"margin-left:10px;margin-right:5px\"><div style=\"float:left;margin-right:2px\"><b>Doug Puett</b></div><div class=\"time\">"
+			(get result "time")
+			"</div>"
+			(str_tags (get result "tags"))
+			"</div><br />
+			<div style=\"height:10px\"></div>
+			<div style=\"margin-left:10px;margin-right:5px\">"
+			(get result "message")
+			"</div></div>")))
 		"</div>"))
 
 (def textarea_div (dom/getElement "post_text"))
@@ -115,7 +111,6 @@
 
 (def textarea "<textarea cols=\"25\" form=\"microblog\" name=\"message\" placeholder=\"Note Goes here.\" rows=\"5\"></textarea>")
 
-;; why is (<! (put! ...)) a necessary construction when doing server calls?
 (defn init_poster []
   (let [clicks (listen (dom/getElement "post_button") "click")
 		results-view (dom/getElement "scroll_posts")]

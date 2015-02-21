@@ -20,6 +20,8 @@
 		:color (:text theme)}]
 	[:.main {
 		:border-radius "6px" 
+		:padding-bottom "5px"
+		:margin-bottom "4px"
 		:background-color (:field theme)
 		:margin-left "50px" 
 		:width "500px"}]
@@ -63,10 +65,24 @@
 		:background-color "#2E4372" 
 		:border-radius "5px" 
 		:border "1px solid black"}]
+	[:.time {
+		:color "grey"
+		:float "left"
+		:padding "1px"
+		:margin-right "2px"
+		:margin-left "2px"
+		}]
 	[:a:link {
 		:color (:text theme) }];;"#4C6680"}]
 	[:a:visited {
 		:color (:text theme) }];;"#4C6680"}]
+	[:.microblog-tag {
+		:background-color (:accent theme)
+		:float "left"
+		:padding "2px"
+		:border-radius "5px"
+		:margin-right "2px"
+		:margin-left "2px"}]
 	[:textarea {
 		:outline "none" 
 		:resize "none" 

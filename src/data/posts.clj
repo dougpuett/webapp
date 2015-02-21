@@ -49,8 +49,30 @@
 ;; MICROBLOG API:
 ;; ===========================
 
+;; some of the ids:
+#_(map :_id (posts))
+
+
+(def object_ids {
+  "54e2bf443004e55bd1b57656" ["tag" "tag2"] 
+  "54e2bf3c3004e55bd1b57655" ["wamp"]
+  "54e2bef13004e55bd1b57654" ["taggg"]
+  "54e2bee33004e55bd1b57653" ["taggs"]
+  "54e2be0a3004e55bd1b57652" ["tag" "taggity" "tag"]
+  "54e2bdf43004e55bd1b57651" ["tag" "tag tag tag"]
+  "54e2ba4030047809194ffa2e" ["tag"]
+  "54dfbb043004bea05cfe9cc1" ["tagity" "tagiop!"]} )
+
+
+(defn tagged_posts [] (mapv #(assoc % :tags (get object_ids (str (:_id %)))) (posts)))
+
+
 ;; get posts (json format)
-(defn json_posts [] (generate-string ["posts" (into [] (map #(hash-map "message" (get % :message) "time" (parse_time (str (get % :_id)))) (posts)))]))
+(defn json_posts [] (generate-string ["posts" (into [] (map #(hash-map 
+  "id" (str (:_id %))
+  "message" (:message %) 
+  "tags" (:tags %)
+  "time" (parse_time (str (get % :_id)))) (tagged_posts)))])) 
 
 ;; write post and then returns json
 (defn mb_post_return [message] (do (let [

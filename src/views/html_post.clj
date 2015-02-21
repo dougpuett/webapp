@@ -2,6 +2,9 @@
  (:refer-clojure :exclude [sort find])
  (:require
  	[webapp.time :refer :all]
+ 	[garden.core :refer [css]]
+ 	[garden.color :as color :refer [hsl rgb]]
+ 	[views.colors :refer :all]
     [views.html_helpers :refer :all]
     [hiccup.core :refer :all]))
 
@@ -9,17 +12,22 @@
 ;; HTML FOR READER PAGE:
 ;; =====================
 
-(defn html_post [post] 
+(defn str_tags [tags] (html (map #(vector :div {:class "microblog-tag"} %) tags)))
+
+(defn html_post_just [post left-text] 
 	(html 
-		[:div {:class "main" :style "padding-top:5px;padding-bottom:5px;margin-bottom:4px;"}
+		[:div {:class "main" :style left-text}
 		[:div {:style "margin-left:10px;margin-right:5px"} 
 			[:div {:style "float:left;margin-right:2px"} [:b "Doug Puett"]]
-			[:div {:style "color:grey;float:left;padding:1px;margin-right:2px;margin-left:2px"} (parse_time (str (:_id post)))]
-			#_[:div {:style "background-color:red;float:left;padding:2px;border-radius:5px;margin-right:2px;margin-left:2px"} "wamp"]]
+			[:div {:class "time"} (parse_time (get post "id"))]
+			(str_tags (get post "tags"))]
 		[:br]
 		[:div {:style "height:10px"}]
-		[:div {:style "margin-left:10px;margin-right:5px"} (:message post)]
+		[:div {:style "margin-left:10px;margin-right:5px"} (get post "message")]
 		]))
+
+(defn html_post [post] (html_post_just post ""))
+(defn html_post_left [post] (html_post_just post "margin-left:0px"))
 
 (defn microblog_html [posts] 
 	(str 
@@ -27,7 +35,7 @@
 		(html [:body
 			[:h2  "Doug's Microblog"]
 			[:div {:class "internal" :style "height:5px;"}]
-			(map html_post (posts))
+			(map html_post posts)
 			])))
 
 ;; ===================
