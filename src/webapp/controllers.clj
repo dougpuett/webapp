@@ -104,7 +104,7 @@
 
 (defn microblog_publish_ctrl [request] (let [message (:message (:params request))] (do 
     (log request "microblog_post" "publish" (:remote-addr request) {:message message})
-    (mb_post_return message "")
+    (mb_post_return "" message)
     message_submitted)))
 
 (defn post_ctrl [request] (friend/authenticated (json_posts)))
