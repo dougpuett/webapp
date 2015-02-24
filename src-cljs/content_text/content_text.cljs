@@ -2,13 +2,20 @@
 	(:require-macros 
 		[cljs.core.async.macros :refer [go]])
 	(:require 
+		[cljs.core.async :refer [<! put! chan]]
+		[cljs-time.core :as time]
+		#_[sablono.core :as html :refer-macros [html]]
+		[cljs-time.coerce :as coerce]
+		[cognitect.transit :as t]
 		[goog.dom :as dom]
 		[goog.events :as events]
-		[cognitect.transit :as t]
-		[cljs.core.async :refer [<! put! chan]])
-	(:import [goog.net XhrIo]
+		[goog.string :as gstring]
+		#_[goog.string.format])
+	(:import 
+		#_[goog Uri]
 		[goog.net Jsonp]
-		[goog Uri]))
+		[goog.net XhrIo]))
+
 
 ;; CORE.ASYNC
 
@@ -26,13 +33,17 @@
 		(XhrIo.send uri (fn [res] (put! out (.getResponseJson (.-target res)))))
 		out))
 
+(defn generate-message-id [] (str (Math/floor (/ (coerce/to-long (time/now)) 1000)) (Math/floor (rand 100000000000000))))
 
 ;; the my_xhr_post function takes a url and a message, creates a channel called "out", then puts the response of the post into that channel and returns it.
-(defn my_xhr_post [uri message]
+(defn my_xhr_post [uri message message-id context]
 	(let [out (chan)]
-		(XhrIo.send uri (fn [res] (put! out (.getResponseJson (.-target res)))) "POST" (str "message=" message))
+		(XhrIo.send uri (fn [res] (put! out (.getResponseJson (.-target res)))) "POST" 
+			(str
+				"message-id=" message-id
+				"&context=" context
+				"&message=" message))
 			out))
-
 
 (defn simple_xhr_post [uri message]
 	(XhrIo.send uri (fn [res] (.getResponseJson (.-target res))) "POST" (str "message=" message)))
@@ -111,12 +122,16 @@
 
 (def textarea "<textarea cols=\"25\" form=\"microblog\" name=\"message\" placeholder=\"Note Goes here.\" rows=\"5\"></textarea>")
 
+(defn get-context [] (let [title (dom/getElement "content_title")] (.-innerHTML title)))
+
 (defn init_poster []
   (let [clicks (listen (dom/getElement "post_button") "click")
 		results-view (dom/getElement "scroll_posts")]
 	(go (while true
 		  (<! clicks) ;; this parks the while loop until we get a click
-		  (let [[_ results] (<! (my_xhr_post "/microblog_post_return" (user-message)))
+		  (let [message-id (generate-message-id)
+		  		context (get-context)
+		  		[_ results] (<! (my_xhr_post "/microblog_post_return" (user-message) message-id context))
 		  		results-view (dom/getElement "scroll_posts")]
 				  	(set! (.-innerHTML results-view) (render-posts results)))))))
 

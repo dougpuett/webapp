@@ -92,9 +92,14 @@
     (log request "microblog_post" "page-view" (:remote-addr request) {}) 
     (mb_post))))
 
-(defn microblog_publish_return_ctrl [request] (let [message (:message (:params request))] (do 
-    (log request "microblog_post" "publish" (:remote-addr request) {:message message}) 
-    (mb_post_return message))))
+(defn microblog_publish_return_ctrl [request] (let 
+    [request-map (:params request)
+     message (:message request-map)
+     message-id (:message-id request-map)
+     context (:context request-map)] (do 
+    (log request "microblog_post" "publish" (:remote-addr request) {:message message})
+    (tag_post message-id context)
+    (mb_post_return message-id message))))
 
 
 (defn microblog_publish_ctrl [request] (let [message (:message (:params request))] (do 

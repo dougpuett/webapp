@@ -32,6 +32,17 @@
  	(find {})
  	(sort {:_id -1})))))
 
+;; get tags from db
+(defn get-tags [] (map #(into {} %) (let [
+   conn (mg/connect)
+   db  (mg/get-db conn "webapp")
+   coll "microtags"]
+ (with-collection db coll 
+  (find {})))))
+
+(defn object_ids [] (apply hash-map (flatten (map #(vector (:message-id %) (:context %)) (get-tags)))))
+
+
 ;; TO DO:
 
 ;; get tags from db
@@ -52,8 +63,13 @@
 ;; some of the ids:
 #_(map :_id (posts))
 
+(defn tag_post [message-id context] (do (let 
+  [conn (mg/connect)
+    db  (mg/get-db conn "webapp")
+    coll "microtags"]
+  (mc/insert db coll {:message-id message-id :context context}))))
 
-(def object_ids {
+(def object_ids_static {
   "54e2bf443004e55bd1b57656" ["tag" "tag2"] 
   "54e2bf3c3004e55bd1b57655" ["wamp"]
   "54e2bef13004e55bd1b57654" ["taggg"]
@@ -63,21 +79,29 @@
   "54e2ba4030047809194ffa2e" ["tag"]
   "54dfbb043004bea05cfe9cc1" ["tagity" "tagiop!"]} )
 
+#_(defn object_ids [] object_ids_static)
 
-(defn tagged_posts [] (mapv #(assoc % :tags (get object_ids (str (:_id %)))) (posts)))
+(defn tagged_posts [] (let 
+  [tags (object_ids)
+   all_posts (posts)] 
+   (mapv #(assoc % :tags (vector (get tags (str (:message-id %))))) all_posts)))
 
 
 ;; get posts (json format)
 (defn json_posts [] (generate-string ["posts" (into [] (map #(hash-map 
   "id" (str (:_id %))
   "message" (:message %) 
-  "tags" (:tags %)
-  "time" (parse_time (str (get % :_id)))) (tagged_posts)))])) 
+  "message-id" (:message-id %)
+  "tags" (cond 
+    (= (:tags %) [nil]) nil 
+    (= (:tags %) ["Content"]) nil
+    1 (:tags %))
+  "time" (parse_time (str (get % :_id)))) (tagged_posts)))]))
 
 ;; write post and then returns json
-(defn mb_post_return [message] (do (let [
+(defn mb_post_return [message-id message] (do (let [
     conn (mg/connect)
     db  (mg/get-db conn "webapp")
     coll "micro"]
-  (mc/insert db coll {:message (html-sanitize policy message)}))
+  (mc/insert db coll {:message-id message-id :message (html-sanitize policy message)}))
   (json_posts)))

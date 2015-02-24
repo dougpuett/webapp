@@ -10,10 +10,12 @@
                  [ring "1.3.1"]
                  [com.novemberain/monger "2.0.0"]
                  [cheshire "5.3.1"]
+                 [sablono "0.2.20"]
+                 [com.andrewmcveigh/cljs-time "0.3.2"]
                  [clj-time "0.8.0"]
                  [garden "1.2.5"]
                  [markdown-clj "0.9.62"]
-                 [org.clojure/clojurescript "0.0-2665"]
+                 [org.clojure/clojurescript "0.0-2913"]
                  [net.drib/strokes "0.5.1"]
                  [com.taoensso/carmine "2.9.0"]
                  [com.cemerick/friend "0.2.1"]
@@ -50,7 +52,7 @@
          :cache-analysis true
          :compiler {
           :output-to "resources/public/js/content_text.js"
-          :optimizations :whitespace
+          :optimizations :advanced
           :pretty-print false}}
         {:source-paths ["src-cljs/webinar"]
          :id "content"
