@@ -20,3 +20,4 @@ resources/public/goog/*
 resources/public/clojure/*
 *init.clj
 target/*
+node_modules*
